@@ -1,0 +1,884 @@
+
+<!DOCTYPE html>
+<html>
+<head><link rel="icon" href="https://i.ibb.co/0BCw9kK/IMG-20200805-WA0019.jpg" type="image/gif" sizes="16x16">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="author" content="Amardeep Kesharwani">
+<title>Solo Music</title>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+
+:root {
+ --primary:#f33449;
+ --white:#fff;
+ --grey:#555;
+}
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+body {
+font-family: 'Open Sans', sans-serif;
+font-size:1rem;
+background:#000;
+}
+body.dark {
+ --white:#000;
+ --grey:#fff;
+}
+a,a:hover {
+text-decoration:none;
+}
+img{
+ max-width:100%;
+}
+p{
+ color:var(--grey);
+}
+.sec {
+ background:var(--white);
+ width:100%;
+ min-height:100vh;
+ max-width:460px;
+ margin:auto;
+ animation:fadeIn 0.5s ease;
+}
+@keyframes fadeIn{
+ 0%{
+  opacity:0;
+ }
+ 100%{
+ opacity:1;
+ }
+}
+button{
+ display:inline-block;
+ outline:none;
+ border:none;
+ background:transparent;
+}
+.sec-1 {
+ padding:20px;
+ display:flex;
+ justify-content: center;
+ text-align: center;
+ min-height:100vh;
+}
+
+.sec-1 svg {
+ width:90%;
+}
+.sec-1 h1 {
+  font-size:2.5rem;
+}
+.sec-1 h1 > span {
+ color:#dd5790;
+}
+.sec-1 p {
+ margin:10px 0 25px;
+ color:#666;
+ font-size:14px;
+}
+.sec-1 button {
+ padding:12px 25px;
+ background:#dd5790;
+ color:#fff;
+ border-radius:30px;
+}
+.hide {
+ display:none;
+}
+.header {
+ margin:0 10px;
+ padding:8px 10px;
+ display:flex;
+ justify-content:space-between;
+ border-bottom:2px solid #ccc;
+ color:var(--grey);
+}
+.header button {
+ color:var(--white);
+ padding:6px 10px;
+ font-size:14px;
+ cursor:pointer;
+ background:#dd5790;
+ border-radius:30px;
+}
+.header button:hover {
+ opacity:0.7;
+}
+body.dark .header button {
+ background:#fff;
+}
+.music-list {
+ padding-bottom:70px;
+}
+.music {
+ padding:10px 10px;
+ display:flex;
+ align-items: center;
+ width:100%;
+ border-bottom:1px solid #dedede;
+ cursor:pointer;
+ color:var(--grey);
+}
+.music.active {
+ color:var(--primary);
+}
+.list-thumbnail {
+ height:60px;
+ width:60px;
+ border-radius:4px;
+ overflow:hidden;
+}
+.list-content {
+ flex:1;
+ padding:0 15px;
+}
+.list-btn {
+ width:50px;
+ height:50px;
+}
+.list-btn > i {
+ font-size:40px;
+ color:var(--grey);
+}
+.music.active .list-btn > i {
+ display:none;
+}
+.music .equalize {
+ display:none;
+}
+.music.active .equalize {
+ display:block;
+}
+.music-list .equalize span {
+ display:inline-block;
+ height:18px;
+ width:3px;
+ margin:1px;
+ background:var(--primary);
+ animation:equalize 1s linear infinite;
+ transform-origin: bottom;
+}
+ .equalize.pause span {
+  animation-play-state:paused!important;
+}
+.equalize span:nth-child(2) {
+ animation-delay:.3s;
+} 
+.equalize span:nth-child(3) {
+ animation-delay:.6s;
+} 
+@keyframes equalize {
+ 0%, 100%{
+  transform:scaleY(1);
+ }
+ 50%{
+  transform:scaleY(0.3);
+ }
+}
+
+.players {
+ position:fixed;
+ width:100%;
+ max-width:460px;
+ left:0;
+ bottom:0;
+ z-index:5;
+ background:var(--white);
+ color:#555;
+ transition:300ms;
+}
+.players.active {
+ height:100vh;
+ top:0;
+ text-align:center;
+ padding:0 20px;
+ overflow-y:scroll;
+ animation:fadeIn 0.5s ease;
+ animation-fill-mode:both;
+}
+.bottom {
+ display:flex;
+ align-items: center;
+ height:70px;
+ padding:5px 10px;
+ border-top:1px solid #ccc;
+}
+.players.active .bottom {
+ display:block;
+ border-top:none;
+ height:auto;
+ padding:0;
+ margin-bottom:25px;
+}
+.thumbnail {
+ height:60px;
+ width:60px;
+ overflow:hidden;
+ border-radius:4px;
+}
+.players.active .thumbnail{
+ width:220px;
+ margin:40px auto;
+ height:220px;
+ border-radius:50%;
+ background:#000;
+ box-shadow:0 4px 10px rgba(0,0,0,0.2);
+}
+
+.players.active .thumbnail.spin {
+ box-shadow: none;
+ animation:spin 4s linear infinite;
+}
+.players.active .thumbnail.spin:hover {
+ animation-play-state:paused;
+ transition:200ms;
+}
+.players.active .thumbnail.spin.pause{
+ animation-play-state:paused;
+}
+@keyframes spin {
+ to{
+ transform:rotate(360deg); 
+ }
+}
+.thumbnail img {
+ object-fit:cover;
+}
+
+.content {
+ flex:1;
+ padding:0 15px;
+ color:var(--grey);
+}
+.btn-group .material-icons {
+ font-size:40px;
+}
+.btn-group button {
+ color:var(--primary);
+ cursor:pointer;
+ height:60px;
+ width:60px;
+ border-radius:50%;
+ cursor:pointer;
+}
+.playBtn {
+ z-index:6;
+}
+
+.back-btn {
+ position:absolute;
+ top:10px;
+ left:10px;
+ height:40px;
+ width:40px;
+ cursor:pointer;
+ border-radius:20px;
+}
+.dark-mode-btn {
+position:absolute;
+ top:10px;
+ right:10px;
+ height:40px;
+ width:40px;
+ cursor:pointer;
+ border-radius:20px;
+}
+
+.back-btn:hover {
+ background:rgba(255,0,0,0.2);
+}
+.back-btn .material-icons {
+  font-size:40px;
+}
+body.dark .players .material-icons {
+ color:#fff;
+}
+body.dark .players .material-icons.active  {
+ color:var(--primary);
+}
+.prevBtn, .nextBtn, .tools , .progress-box, .back-btn, .dark-mode-btn {
+ display:none;
+}
+.players.active .nextBtn,
+.players.active .prevBtn,
+.players.active .back-btn,
+.players.active .dark-mode-btn {
+ display:inline-block;
+}
+.players.active .progress-box,
+.players.active .tools {
+ display:flex;
+}
+.tools {
+ width:100%;
+ margin:30px 0;
+ justify-content: space-evenly;
+}
+.tools .material-icons {
+ font-size:30px;
+ color:#555;
+ cursor:pointer;
+}
+.tools .material-icons.active {
+ color:var(--primary);
+}
+.players.active .playBtn {
+ margin:0 25px;
+ background:rgba(255,0,0,0.2);
+ transition:0.3s;
+}
+.players.active .playBtn:hover {
+ background:var(--primary);
+ color:#fff;
+}
+.players.active .content h3{
+ font-size:24px;
+ color:var(--primary);
+}
+.progress-box {
+ position:relative;
+ margin-bottom:30px;
+ display:none;
+ width:100%;
+ justify-content:space-between;
+ font-size:14px;
+}
+.players.active .progress-box {
+ display:flex;
+}
+.progress-bar {
+    -webkit-appearance: none;
+    appearance: none;
+    position: absolute;
+    z-index: 4;
+    height: 5px;
+    background: #ccc;
+    width: 100%;
+    border-radius: 30px;
+    top:-10px;
+}
+.progress-bar::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 15px;
+    width: 15px;
+    border: 0;
+    background: var(--primary);
+    border-radius:50%;
+    cursor: pointer;
+} 
+  
+.volume-box {
+ display:none;
+}
+.players.active .volume-box {
+ transform:translateY(15px);
+ display: none;
+}
+.players.active .volume-box.show {
+ display: block;
+}
+
+.volume-box .progress-bar {
+ position:relative;
+ width:60%;
+}
+.volume-box > span {
+ display:inline-block;
+ height:30px;
+ width:30px;
+ margin:0 5px;
+ cursor:pointer;
+ transition:200ms;
+}
+.volume-box > span:hover {
+ color:var(--primary);
+}
+#audio {
+ display:none;
+}
+</style>
+</head>
+<body>
+<section class="sec sec-1" id="sec-1">
+  <div>
+  
+<h1>Saathi<span>Music</span></h1>
+<br><br><img src="https://i.ibb.co/0BCw9kK/IMG-20200805-WA0019.jpg"><br><br><button onclick="showMusicList()">Let's Start</button><br><footer>
+<p><br>&copy;Kabir Arya & &copy;Ayush Arya<br>
+
+                        <a class="social-icon" href="https://www.instagram.com/kabir_arya001/"><i class="fab fa-instagram"><img src="https://img.icons8.com/ios-filled/32/000000/instagram-new.png"/></i></a>
+                        <a class="social-icon" href="https://www.github.com/"><i class="fab fa-github"></i><img src="https://img.icons8.com/ios-filled/32/000000/github.png"/></a>
+                        <a class="social-icon" href="https://t.me/kabir_arya001"><i class="fab fa-telegram"></i><img src="https://img.icons8.com/ios-filled/32/000000/telegram-app.png"/></a>
+                        <a class="social-icon" href="https://discord.gg/cMM4YmqY"><i class="fab fa-discord"></i><img src="https://img.icons8.com/ios-filled/32/000000/discord-logo.png"/></a> </p>
+</footer>
+  </div>
+</section>
+<section class="sec sec-2 hide" id="sec-2">
+
+<header class="header">
+<!-- <button onclick="filterCat('Sad')">Sad</button>
+ <button onclick="filterCat('Love')">Love</button>
+ <button onclick="filterCat('Dance')">Dance</button>
+ <button onclick="filterCat('Romantic')">Romantic</button>
+ <button onclick="filterAll()">All</button>
+ -->
+ <h3>All Songs</h3>
+</header>
+
+ <div class="music-list" id="music-list">
+ </div>
+ <audio src="" id="audio" ></audio>
+ <div class="players" id="players">
+   <button class="back-btn" onclick="showplayer()"><i class="material-icons" >expand_more</i></button>
+   <button class="dark-mode-btn" onclick="darkMood()"><i class="material-icons" >invert_colors</i></button>
+   
+   <div class="bottom" >
+     <div class="thumbnail" >
+         <img id="thumbnail" src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQRdF1EyT4zeHHIcicA4wA8uMjxoGAblXsTIiXPhdTCzbG1YI18&usqp=CAU" alt="" >
+     </div>
+     <div class="content" onclick="showplayer()">
+       <h3 id="name">Name</h3>
+       <small id="category">Category</small>
+     </div>
+     
+     <div class="volume-box">
+     <span onclick="volumeDown()"><i class="material-icons">remove</i></span>
+     
+     <input type="range" class="progress-bar" id="volumeBar" step="1" value="80" min="0" max="100"
+      oninput="audio.volume = this.value/100">
+      
+     <span onclick="volumeUp()"><i class="material-icons">add</i></span>
+     </div>
+     
+     <div class="tools" >
+       <button class="equaliser" onclick="equalizerBtn(event)">
+       <i class="material-icons">equalizer</i>
+       </button>
+       <button class="repeat" onclick="repeat(event)">
+         <i class="material-icons">repeat</i>
+       </button>
+       <button class="volume" onclick="volumeBox(event)">
+         <i class="material-icons">volume_up</i>
+       </button>  
+       <button class="favorite" onclick="addFvt(event)">
+         <i class="material-icons">favorite</i>
+       </button>
+     </div>
+     <div class="progress-box" >
+       <input type="range" class="progress-bar" id="progress" min="0" max="" value="0" onchange="changeProgressBar()"/>
+         <div id="ctview" >00:00</div>
+         <div id="ttview">00:00</div>
+     </div>
+     <div class="btn-group" >
+       <button class="prevBtn" onclick="prevPlay()">
+         <i class="material-icons">skip_previous</i>
+       </button>
+       <button class="playBtn"  onclick="playPause(event)">
+        <i id="playBtn" class="material-icons">play_arrow</i>
+       </button>
+       <button class="nextBtn" onclick="nextPlay()">
+         <i class="material-icons">skip_next</i>
+       </button>
+     </div>
+   </div>
+ </div>
+</section>
+<!-- script  -->
+<script>
+// amardeep kesharwani
+ const playerWindow = document.getElementById("players");
+ const audio = document.getElementById("audio");
+ const name = document.getElementById("name");
+ const category = document.getElementById("category");
+ const thumbnail = document.getElementById("thumbnail");
+ const playBtn = document.getElementById("playBtn");
+ const progress = document.getElementById("progress");
+ const ttview = document.getElementById("ttview");
+ const tcview = document.getElementById("tcview");
+ const volumeBar = document.getElementById("volumeBar");
+ 
+ const musicList = document.getElementById("music-list");
+ const body = document.querySelector("body");
+ // variable 
+  let musicData = [
+
+ {
+
+ id:1,
+ category:"Punjabi",
+ name:"Teri Choriyaan",
+ src:"https://github.com/kabir01arya/music_web_app/raw/main/Chhalaang_%20Teri%20Choriyaan%20_%20Rajkummar%20R%2C%20Nushrratt%20B%20_%20Guru%20Randhawa%2C%20VEE%2C%20Payal%20Dev%20(%20128kbps%20).mp3",
+ image:"https://i.ibb.co/25s93Mc/teri-choriyaan-lyrics.jpg",
+ },
+ {
+ id:2,
+ category:"Hindi",
+ name:"Har Har Gange",
+ src:"https://github.com/kabir01arya/music_web_app/raw/main/04%20Har%20Har%20Gange%20-%20Arijit%20Singh.mp3",
+ image:"https://i.ibb.co/6Y8WKyD/crop-480x480-1536220939.jpg",
+ },
+ {
+ id:3,
+ category:"Punjabi",
+ name:"Light Weight",
+ src:"https://github.com/kabir01arya/music_web_app/raw/main/Light%20Weight%20Kulwinder%20Billa.mp3",
+ image:"https://i.ibb.co/WP97fC4/size-xxl-1540453940.webp",
+ },
+ {
+ id:4,
+ category:"Punjabi",
+ name:"Khaab",
+ src:"https://github.com/kabir01arya/music_web_app/raw/main/Khaab%20-%20Akhil%20-%20320Kbps.mp3",
+ image:"https://i.ibb.co/ySfFsWT/artworks-000198967004-wi7ya0-t500x500.jpg",
+ },
+ {
+ id:5,
+ category:"Punjabi",
+ name:"Love you Jatta",
+ src:"https://github.com/kabir01arya/music_web_app/raw/main/Love%20You%20Jatta.mp3",
+ image:"https://i.ibb.co/FzfN4hV/Love-You-Jatta-By-Garry-Sandhu-Full-Song-Lyrics-New-Punjabi-Song.jpg",
+ },
+ {
+ id:6,
+ category:"Punjabi",
+ name:"Like U",
+ src:"https://github.com/kabir01arya/music_web_app/raw/main/Like%20U%20(Tere%20Jaisi)%20-%20Garry%20Sandhu%20(DjPunjab.Com).mp3",
+ image:"https://i.ibb.co/0r7SwHW/8497a2bb3bd2ea9d929c242ede79aed2-480x480x1.jpg",
+ },
+ {
+ id:7,
+ category:"English",
+ name:"Suger",
+ src:"https://github.com/kabir01arya/music_web_app/raw/main/DHARIA%20-%20Sugar%20%26%20Brownies%20(by%20Monoir)%20_Official%20Video_%20(%20128kbps%20).mp3",
+ image:"https://i.ibb.co/myvjtSD/t546192315-b1541157903-s400.jpg",
+ },
+ {
+ id:8,
+ category:"English",
+ name:"Sabrina Carpenter",
+ src:"https://github.com/kabir01arya/music_web_app/raw/main/Alan%20Walker%2C%20Sabrina%20Carpenter%20%26%20Farruko%20-%20On%20My%20Way%20(Lyrics)%20(%20128kbps%20).mp3",
+ image:"https://i.ibb.co/7R8tjtD/d4a4e53ef5082b6c912b8c8cc859f703.jpg",
+ },
+ {
+ id:9,
+ category:"Punjabi",
+ name:"Haryana Roadways",
+ src:"https://github.com/kabir01arya/music_web_app/raw/main/Badshah%20%26%20Fazilpuria%20-%20Haryana%20Roadways%20_%20Latest%20Hit%20Song%202020%20(%20128kbps%20).mp3",
+ image:"https://i.ibb.co/0GGbDZV/haryana.jpg",
+ },
+ {
+ id:10,
+ category:"English",
+ name:"Dua Lipa-Levitating",
+ src:"https://github.com/kabir01arya/music_web_app/raw/main/Dua%20Lipa%20-%20Levitating%20Featuring%20DaBaby%20(Official%20Music%20Video)%20(%20128kbps%20).mp3",
+ image:"https://i.ibb.co/8zVVLxx/Dua-Lipa-Levitating.jpg",},
+ {
+ id:11,
+ category:"English",
+ name:"FRIEND",
+ src:"https://github.com/kabir01arya/music_web_app/raw/main/Marshmello%20%26%20Anne-Marie%20-%20FRIENDS%20(Music%20Video)%20_OFFICIAL%20FRIENDZONE%20ANTHEM_%20(%20128kbps%20).mp3",
+ image:"https://i.ibb.co/njDPLx6/Marshmello-and-Anne-Marie-Friends.jpg",
+ },
+ {
+ id:12,
+ category:"English",
+ name:"Marwa Loud-Bad Boy",
+ src:"https://github.com/kabir01arya/music_web_app/raw/main/Marwa%20Loud%20-%20Bad%20Boy%20(Clip%20Officiel)%20(%20128kbps%20).mp3",
+ image:"https://i.ibb.co/whXLvmL/afb819b543449ccbcf4f5be23860a796.jpg",
+ papular:15,
+ },
+ {
+ id:13,
+ category:"Tamil",
+ name:"Master The Blaster",
+ src:"https://github.com/kabir01arya/music_web_app/raw/main/Master%20-%20Master%20the%20Blaster%20Lyric%20_%20Thalapathy%20Vijay%20_%20AnirudhRavichander%20_%20LokeshKanagaraj%20(%20128kbps%20).mp3",
+ image:"https://i.ibb.co/GHp6LDm/maxresdefault.jpg",
+ },
+ {
+ id:14,
+ category:"Hindi",
+ name:"Scam 1992",
+ src:"https://github.com/kabir01arya/music_web_app/raw/main/Scam%201992%20Edit%20_%20The%20Harshad%20Mehta%20Story%20(%20256kbps%20cbr%20).mp3",
+ image:"https://i.ibb.co/C8Nd2VQ/MV5-BNjgx-ZTMx-Nm-Qt-ZGFk-ZS00-NDUy-LTll-Mz-Yt-OTE0-Zjdl-Mj-M1-ZWU0-Xk-Ey-Xk-Fqc-Gde-QXVy-MTAy-MTE1.jpg",
+ },
+ {
+ id:15,
+ category:"Punjabi",
+ name:"Crazy Habibi Vs Decent Munda",
+ src:"https://github.com/kabir01arya/music_web_app/raw/main/Crazy%20Habibi%20Vs%20Decent%20Munda%20-%20Arjun%20Patiala%20128%20Kbps.mp3",
+ image:"https://i.ibb.co/jGQMkrk/crop-480x480-1562125444.jpg",
+ },
+ {
+ id:16,
+ category:"Punjabi",
+ name:"Downtown",
+ src:"https://github.com/kabir01arya/music_web_app/raw/main/Downtown%20Remix(Remix%20By%20Dj%20Yogii)%20-%20Vee%20And%20Guru%20Randhawa%20128%20Kbps.mp3",
+ image:"https://i.ibb.co/cQM5L6P/42598673-2010636215664088-3008116491921915904-n.jpg",
+ },
+ {
+ id:17,
+ category:"Punjabi",
+ name:"Game Over",
+src:"https://github.com/kabir01arya/music_web_app/raw/main/Game%20Over_192(PaglaSongs).mp3",
+ image:"https://i.ibb.co/rf9fTcb/96086484-106020991025771-9002385581843270451-n.jpg",
+ },
+ {
+ id:18,
+ category:"Hindi + Bengali",
+ name:"Genda Phool",
+ src:"https://github.com/kabir01arya/music_web_app/raw/main/Genda%20Phool%20-%20Badshah%20128%20Kbps.mp3",
+ image:"https://i.ibb.co/Mkypzgs/MV5-BNTY5-N2-Q5-ZTgt-NTQ0-NS00-ODYz-LTg1-Zm-It-Ym-Q0-MGFm-M2-Vi-OWI5-Xk-Ey-Xk-Fqc-Gde-QXVy-MTA5-Nz-I.jpg"
+ },
+ {
+id:19,
+category:"Punjabi",
+name:"High Rated Gabru-Guru Randhawa",
+src:"https://github.com/kabir01arya/music_web_app/raw/main/High%20Rated%20Gabru%20-%20Guru%20Randhawa%20320Kbps.mp3",
+image:"https://i.ibb.co/NppMhRY/92ce3500377cd15519a3f1d1eae2b2ce.jpg"
+ },
+ {
+ id:20,
+ category:"Hindi + Punjabi",
+ name:"Kalle Kalle",
+ src:"https://github.com/kabir01arya/music_web_app/raw/main/Kalle%20Kalle%20-%20(amlijatt.in).mp3",
+ image:"https://i.ibb.co/RCNVQ6Y/Kalle-Kalle-Single-Hindi-2020-20200205084457-500x500.jpg",
+ },
+ {
+ id:21,
+ category:"English + Hindi",
+ name:"Lean on",
+ src:"https://github.com/kabir01arya/music_web_app/raw/main/Lean%20On%20Emiway%20Bantai.mp3",
+ image:"https://i.ibb.co/nDFbbCH/lean-on300.jpg",
+ },
+{
+id:22,
+category:"Hindi",
+name:"Move",
+src:"https://github.com/kabir01arya/music_web_app/raw/main/Move%20Raftaar%20-%20HDYaar.Com.mp3",
+image:"https://i.ibb.co/rcFdg2q/crop-480x480-1584692694.jpg"
+},
+ {
+ id:23,
+ category:"English",
+ name:"ViVi Trend",
+ src:"https://github.com/kabir01arya/music_web_app/raw/main/The%20ViVi%20Trend%20Tiktok%20Song%20_%20Yrn%20Ezra%20Remix%20(%20128kbps%20).mp3",
+ image:"https://i.ibb.co/0BvGNmy/mqdefault.jpg",
+ },
+ {
+ id:24,
+ category:"English",
+ name:"Paris",
+ src:"https://github.com/kabir01arya/music_web_app/raw/main/Willy%20William%20feat.%20Cris%20Cab%20-%20Paris%20(Clip%20officiel)%20(%20128kbps%20).mp3",
+ image:"https://i.ibb.co/zV27VXQ/ab67616d00001e0264591f2ebffd24ee9c7e5b45.jpg",
+ },
+ {
+ id:25,
+ category:"English",
+ name:"Soul Operation",
+ src:"https://github.com/kabir01arya/music_web_app/raw/main/YWG%20The%20Rapper%20-%20SOUL%20OPERATION%20(Official%20Lyric%20Video)%20(%20128kbps%20).mp3",
+ image:"https://i.ibb.co/kKLJxHD/hqdefault.jpg",
+ },
+ ]
+let repeatMusic = false;
+let index = 1;
+let songs = musicData;
+
+const elc = musicList.getElementsByClassName("equalize")[index-1];
+
+const showMusicList = () => {
+ document.querySelector(".sec-1").classList.add("hide");
+ document.querySelector(".sec-2").classList.remove("hide");
+}
+const darkMood = () => {
+ body.classList.toggle("dark");
+}
+
+const setActive = (i) => {
+  setEqualizer()
+  let a =  musicList.querySelector(".active");
+  if(a !== null) {
+   a.classList.remove("active");
+  }
+  const ele = document.getElementsByClassName("music")[i-1];
+  ele.classList.add("active");
+}
+
+const setData = data => {
+ name.textContent = data.name;
+ category.textContent = data.category;
+ thumbnail.src = data.image;
+} 
+
+const playMusic = async (i) => {
+  if(i == 18 || i == 10 ) {
+   body.classList.toggle("dark");
+   setTimeout(() => body.classList.toggle("dark"),7000);
+  }
+  let data = musicData.find(m => m.id === i) || musicData[1];
+  setActive(i)
+  setData(data);
+  playBtn.textContent = "pause";
+  audio.src = data.src;
+  await audio.load();
+  audio.play();
+}
+ 
+ const playPause = e => {
+    if(audio.paused) {
+    playBtn.textContent = "pause";
+    audio.play();
+    setEqualizer()
+   } else{
+   playBtn.textContent = "play_arrow";
+    audio.pause();
+    setEqualizer(true)
+   }
+ }
+ 
+ const showplayer = () => {
+   playerWindow.classList.toggle("active");
+ }
+ const equalizerBtn = e => {
+  e.target.classList.toggle("active");
+  document.querySelector(".thumbnail").classList.toggle("spin");
+ }
+ const addFvt = e => {
+  e.target.classList.toggle("active")
+ }
+ const repeat = e => {
+  e.target.classList.toggle("active")
+  repeatMusic = !repeatMusic;
+  audio.loop = repeatMusic;
+ }
+ const volumeBox = e => {
+  e.target.classList.toggle("active");
+  document.querySelector(".volume-box").classList.toggle("show");
+ }
+ const nextPlay = () => {
+  index++;
+  if (index > musicData.length) {
+   index = 1;
+  }
+  playMusic(index);
+ }
+ const prevPlay = () => {
+  index--;
+  if (index <= 0) {
+  index = musicData.length;
+  }
+  playMusic(index);
+ }
+ // eventListners 
+ audio.addEventListener("ended", () => {
+  nextPlay();
+ })
+ audio.onloadeddata = () =>  {
+ progress.max = audio.duration
+ const ds = parseInt(audio.duration % 60)
+ const dm = parseInt((audio.duration / 60) % 60)
+ ttview.textContent = dm + ':' + ds;
+ }
+ audio.ontimeupdate =  () =>  { 
+   progress.value = audio.currentTime 
+ }
+ audio.addEventListener('timeupdate', () => {
+ //progress.value = audio.currentTime;
+ var cs = parseInt(audio.currentTime % 60)
+ var cm = parseInt((audio.currentTime / 60) % 60)
+  ctview.textContent = cm + ':' + cs;
+ }, false);
+ 
+ const changeProgressBar = () => { 
+   audio.currentTime = progress.value;
+ }
+ 
+/* volume control */
+ const volumeDown = () => {
+  volumeBar.value = Number(volumeBar.value) - 20
+  audio.volume = volumeBar.value / 100
+ }
+ const volumeUp = () => {
+  volumeBar.value = Number(volumeBar.value) + 20
+  audio.volume = volumeBar.value / 100
+ }
+ 
+
+ const addList = (data) => {
+  let div = document.createElement("div");
+  div.classList.add('music');
+  div.setAttribute("data-id", data.id);
+  let html = `
+   <div class="list-thumbnail" >
+    <img src="${data.image}" alt="" >
+   </div>
+   <div class="list-content" >
+   <h3>${data.name}</h3>
+   <small>${data.category}</small>
+   </div>
+   <button class="list-btn" >
+   <i class="material-icons">play_arrow</i>
+    <div class="equalize">
+    <span></span>
+    <span></span>
+    <span></span>
+   </div>
+   </button>`;
+   div.innerHTML = html;
+   musicList.append(div);
+   div.addEventListener('click', () => {
+    playMusic(data.id);
+    playerWindow.classList.add("active");
+    index = data.id;
+   });
+ }
+ 
+ const setMusicList =  () => {
+  songs.forEach(song => addList(song));
+ }
+ 
+ const FirstSetUp = () => {
+  audio.src = musicData[index -1].src;
+  setData(musicData[index -1]);
+  setMusicList();
+ }
+ FirstSetUp()
+ 
+ const filterCat = (cat) => {
+  songs = musicData.filter(song => song.category == cat);
+  while(musicList.hasChildNodes()){
+    musicList.removeChild(musicList.firstChild);
+  }
+  setMusicList()
+ }
+ const filterAll = () => {
+  songs = musicData;
+  while(musicList.hasChildNodes()){
+    musicList.removeChild(musicList.firstChild);
+  }
+  setMusicList()
+ }
+function setEqualizer(action = false){
+ const elc = musicList.getElementsByClassName("equalize")[index-1];
+ const thumb =  document.querySelector(".thumbnail");
+ if(elc.classList.contains("pause")) {
+   elc.classList.remove("pause")
+ } else {
+  if(action) {
+   elc.classList.add("pause")
+  }
+ }
+ if(thumb.classList.contains("spin") && audio.paused && action){
+  thumb.classList.add("pause");
+ } else if(thumb.classList.contains("spin") &&!audio.paused){
+  thumb.classList.remove("pause");
+ }
+}
+</script>
+</body>
+</html>
